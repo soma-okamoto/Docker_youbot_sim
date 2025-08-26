@@ -1,0 +1,31 @@
+﻿# ---- Catkin/ROS build outputs ----
+build/
+devel/
+install/
+logs/
+.catkin_tools/
+
+# ---- ROS runtime & logs ----
+.ros/
+.dbus/
+
+# ---- Gazebo / Ignition caches ----
+.gazebo/
+.ignition/
+.sdformat/
+
+# ---- WSLg / misc caches ----
+.cache/
+.config/
+
+# ---- IDE / editor ----
+.vscode/
+.idea/
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+
+# ---- OS ----
+Thumbs.db
+Desktop.ini

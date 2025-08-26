@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+
+<launch>
+	<node name="slam2d_ros" pkg="iris_lama_ros" type="slam2d_ros" output="screen">
+		<param name="global_frame_id" type="string" value="map" />
+		<param name="frame_id" type="string" value="base_link" />
+		<param name="odom_frame_id" type="string" value="odom" />
+		<param name="scan_topic" type="string" value="/scan_front" />
+		<param name="map_publish_period" type="double" value="1" />
+		<param name="transform_tolerance" type="double" value="0.1" />
+		<param name="resolution" type="double" value="0.05" />
+		
+		
+	</node>
+
+	<!-- <include file="$(find youbot_gazebo_robot)/launch/youbot_rtabmap.launch" /> -->
+	
+	<!-- <node pkg="tf" type="static_transform_publisher" name="map_world_broadcaster" args="0 0 0 0 0 0 world /map 100" /> -->
+
+	<!-- <node name="octomap_server" pkg="octomap_server" type="octomap_server_node">
+		<remap from="cloud_in" to="/rtabmap/cloud_map" />
+		<param name="frame_id" type="string" value="map" />
+		<param name="latch" value="false" />
+		<param name="resolution" value="0.05" />
+	</node> -->
+
+	<!-- <node name="rviz" pkg="rviz" type="rviz" args="-d $(find turtlebot_octomap)/config/octomap_test.rviz" /> -->
+
+	<!-- <node name="turtlebot3_teleop_key" pkg="turtlebot3_teleop" type="turtlebot3_teleop_key" /> -->
+</launch>

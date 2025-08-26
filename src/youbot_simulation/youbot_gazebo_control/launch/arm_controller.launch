@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="arm_name" default="arm_1"/>
+
+  <!-- upload arm and gripper controller parameters -->
+  <rosparam file="$(find youbot_gazebo_control)/config/$(arg arm_name)_controller.yaml" command="load" ns="youbot/$(arg arm_name)"/> 
+ 
+  <!-- spawn arm controller -->
+  <node pkg="controller_manager" type="spawner" name="$(arg arm_name)_arm_controller_spawner"  args="youbot/$(arg arm_name)/arm_controller" respawn="false" output="screen" />
+  <!-- <node pkg="controller_manager" type="spawner" name="$(arg arm_name)_joint_velocity_controller_spawner"  args="$(arg arm_name)/arm_joint1_velocity_controller
+  $(arg arm_name)/arm_joint2_velocity_controller
+  $(arg arm_name)/arm_joint3_velocity_controller
+  $(arg arm_name)/arm_joint4_velocity_controller
+  $(arg arm_name)/arm_joint5_velocity_controller"/>
+
+  <node pkg="controller_manager" type="spawner" name="$(arg arm_name)_joint_position_controller_spawner"  args="$(arg arm_name)/arm_joint1_position_controller
+  $(arg arm_name)/arm_joint2_position_controller
+  $(arg arm_name)/arm_joint3_position_controller
+  $(arg arm_name)/arm_joint4_position_controller
+  $(arg arm_name)/arm_joint5_position_controller"/> -->
+                                                                                                           
+  <!-- <node pkg="controller_manager" type="spawner" name="$(arg arm_name)_arm_joint2_controller_spawner"  args="$(arg arm_name)/arm_joint2_controller" respawn="false" output="screen" />
+  <node pkg="controller_manager" type="spawner" name="$(arg arm_name)_arm_joint3_controller_spawner"  args="$(arg arm_name)/arm_joint3_controller" respawn="false" output="screen" />
+  <node pkg="controller_manager" type="spawner" name="$(arg arm_name)_arm_joint4_controller_spawner"  args="$(arg arm_name)/arm_joint4_controller" respawn="false" output="screen" />
+  <node pkg="controller_manager" type="spawner" name="$(arg arm_name)_arm_joint5_controller_spawner"  args="$(arg arm_name)/arm_joint5_controller" respawn="false" output="screen" /> -->
+  
+  <!-- spawn gripper controller -->
+  <!-- <node pkg="controller_manager" type="spawner" name="$(arg arm_name)_gripper_controller_spawner"  args="youbot/$(arg arm_name)/gripper_controller" respawn="false" output="screen" /> -->
+ 
+</launch>

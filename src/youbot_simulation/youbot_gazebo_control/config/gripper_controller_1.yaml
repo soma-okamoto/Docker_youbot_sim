@@ -1,0 +1,6 @@
+gripper_controller_1:
+  type: position_controllers/JointPositionController
+  joint: gripper_left_finger_fastener_joint
+  # pid: {p: 1.0, i: 0.01, d: 0.1}
+  
+
