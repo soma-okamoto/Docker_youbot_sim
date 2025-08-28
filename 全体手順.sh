@@ -14,9 +14,8 @@ docker run -d --name youbot_pro -p 9092:9090 -v C:\Users\soma0\Docker_project\yo
 docker exec -it youbot_pro bash
 
 
-# 実行（WSLg 連携
+# youbot_sim実行（WSLg 連携
 docker rm -f sim_dev 2>/dev/null
-
 docker run --gpus all -d --name sim_dev \
   --device /dev/dxg \
   -e DISPLAY=$DISPLAY \
@@ -53,11 +52,12 @@ docker network connect rosnet youbot_pro
 
 
 # 2) Docker_ReachabilityMapターミナル
-export ROS_MASTER_URI=http://ros_dev:11311
-export ROS_HOSTNAME=ros_dev 
+export ROS_MASTER_URI=http://irm_dev:11311
+export ROS_HOSTNAME=irm_dev 
 source /opt/ros/noetic/setup.bash
 roslaunch rosbridge_server rosbridge_websocket.launch
 
+find ~/Detect_ws/src/detect_pkg/scripts -type f -name "*.py" -print0 | xargs -0 dos2unix
 
 cd RM
 source devel/setup.bash
@@ -69,8 +69,8 @@ rosrun sampled_reachability_maps MR_IRM_firstRoute_fixed.py
 
 cd Detect_ws
 source devel/setup.bash
-export ROS_MASTER_URI=http://ros_dev:11311
-export ROS_HOSTNAME=ros_dev 
+export ROS_MASTER_URI=http://irm_dev:11311
+export ROS_HOSTNAME=irm_dev 
 
 rosrun detect_pkg DetectTarget.py \
   --win=0.5,0.25,0.25 \
@@ -92,12 +92,16 @@ rosrun RIR_pkg2 Get_RL_neccesary_data.py
 # 2) Esaki_youbootターミナル
 cd catkin_ws
 source /opt/ros/noetic/setup.bash
-export ROS_MASTER_URI=http://ros_dev:11311
-export ROS_HOSTNAME=esaki_youbot
+export ROS_MASTER_URI=http://irm_dev:11311
+export ROS_HOSTNAME=youbot_pro
 source devel/setup.bash
+
+
+find ~/catkin_ws/src/esaki_youbot_project_gradient/src -type f -name "*.py" -print0 | xargs -0 dos2unix
 
 rosrun esaki_youbot_project_gradient youbot_real_trajectory_node.py
 rosrun esaki_youbot_project_gradient youbot_real_recover_trajectory.py
+
 rosrun esaki_youbot_project_gradient Bridge_Simulation_command.py
 
 rosrun esaki_youbot_project_gradient Bridge_Simulation_gripper.py
@@ -118,11 +122,12 @@ chmod +x ~/catkin_ws/src/esaki_youbot_project_gradient/src/qp_posture_servo.py
 sed -i 's/\r$//' ~/catkin_ws/src/esaki_youbot_project_gradient/src/qp_posture_servo.py
 roslaunch esaki_youbot_project_gradient youbot_bringup.launch
 
+find ~/Detect_ws/src/detect_pkg/scripts -type f -name "*.py" -print0 | xargs -0 dos2unix
 
 # 2) simターミナル
 docker exec -it sim_dev bash
 
-export ROS_MASTER_URI=http://sim_dev:11311
+export ROS_MASTER_URI=http://irm_dev:11311
 export ROS_HOSTNAME=sim_dev
 source devel/setup.bash
 
@@ -136,9 +141,22 @@ roslaunch youbot_gazebo_robot youbot_dual_arm.launch world:=robocup_at_work_2012
 # 2) proターミナル
 docker exec -it youbot_pro bash
 
-export ROS_MASTER_URI=http://sim_dev:11311
+find ~/catkin_ws/src/esaki_youbot_project_gradient/src -type f -name "*.py" -print0 | xargs -0 dos2unix
+
+
+cd catkin_ws
+export ROS_MASTER_URI=http://irm_dev:11311
 export ROS_HOSTNAME=youbot_pro
 source devel/setup.bash
 
 rosrun esaki_youbot_project_gradient youbot_real_trajectory_node.py
 rosrun esaki_youbot_project_gradient Bridge_Simulation_command.py
+
+roslaunch esaki_youbot_project_gradient youbot_qp_servo.launch
+
+rosrun esaki_youbot_project_gradient youbot_real_trajectory_node_full_reconfig_1.py
+
+
+ rosrun esaki_youbot_project_gradient ybt_metrics_csv_logger.py 
+ 
+docker cp youbot_pro:/tmp/ybt_metrics_20250828_204509.csv .

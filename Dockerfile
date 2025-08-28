@@ -41,7 +41,13 @@ RUN apt-get update && apt-get install -y \
     ros-noetic-ros-control \
     ros-noetic-ros-controllers \
     ros-noetic-gazebo-ros-control \
+    gazebo11 gazebo11-common gazebo11-plugin-base \
+    ros-noetic-gazebo-ros \
+    ros-noetic-gazebo-plugins \
     ros-noetic-xacro \
+    libgl1-mesa-dri \
+    mesa-utils \
+    mesa-vulkan-drivers \
   && rm -rf /var/lib/apt/lists/*
 
 # rosdep 初期化
