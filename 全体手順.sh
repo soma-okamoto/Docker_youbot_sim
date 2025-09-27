@@ -12,6 +12,17 @@ docker rm -f youbot_pro
 docker run -d --name youbot_pro -p 9092:9090 -v C:\Users\soma0\Docker_project\youbot_pro\Docker_Youbot_project_gradient:/root youbot_pro tail -f /dev/null
 
 docker exec -it youbot_pro bash
+###内外の場合
+docker rm -f youbot_pro
+docker run -d \
+  --network=host \
+  -e ROS_MASTER_URI=http://192.168.44.61:11311 \
+  -e ROS_IP=192.168.44.61 \
+  -v /mnt/c/Users/soma0/Docker_project/youbot_pro/Docker_Youbot_project_gradient:/root/work:rw \
+  --name youbot_pro \
+  youbot_pro tail -f /dev/null    # ← これが「前面で動き続ける」役
+
+docker exec -it youbot_pro bash
 
 
 # youbot_sim実行（WSLg 連携
@@ -58,11 +69,12 @@ source /opt/ros/noetic/setup.bash
 roslaunch rosbridge_server rosbridge_websocket.launch
 
 find ~/Detect_ws/src/detect_pkg/scripts -type f -name "*.py" -print0 | xargs -0 dos2unix
+find ~/RM/src -type f -name "*.py" -print0 | xargs -0 dos2unix
 
 cd RM
 source devel/setup.bash
-export ROS_MASTER_URI=http://ros_dev:11311
-export ROS_HOSTNAME=ros_dev 
+export ROS_MASTER_URI=http://irm_dev:11311
+export ROS_HOSTNAME=irm_dev 
 
 roslaunch sampled_reachability_maps MR_IRM_generate_Docker.launch
 rosrun sampled_reachability_maps MR_IRM_firstRoute_fixed.py
@@ -127,6 +139,8 @@ find ~/Detect_ws/src/detect_pkg/scripts -type f -name "*.py" -print0 | xargs -0 
 # 2) simターミナル
 docker exec -it sim_dev bash
 
+
+
 export ROS_MASTER_URI=http://irm_dev:11311
 export ROS_HOSTNAME=sim_dev
 source devel/setup.bash
@@ -149,12 +163,29 @@ export ROS_MASTER_URI=http://irm_dev:11311
 export ROS_HOSTNAME=youbot_pro
 source devel/setup.bash
 
+catkin clean -f 
+source /opt/ros/noetic/setup.bash
+catkin build
+
+export ROS_MASTER_URI=192.168.44.61:11311
+export ROS_HOSTNAME=192.168.44.61
+
+
+source devel/setup.bash
+
 rosrun esaki_youbot_project_gradient youbot_real_trajectory_node.py
+rosrun esaki_youbot_project_gradient youbot_real_trajectory_node_FMS.py
+
 rosrun esaki_youbot_project_gradient Bridge_Simulation_command.py
 
-roslaunch esaki_youbot_project_gradient youbot_qp_servo.launch
 
-rosrun esaki_youbot_project_gradient youbot_real_trajectory_node_full_reconfig_1.py
+roslaunch esaki_slam youbot_move_base.launch
+roslaunch slam_toolbox online_async.launch 
+
+rosrun esaki_youbot_project_gradient IRM_youbot_baseMove.py
+rosrun esaki_youbot_project_gradient Origin_move_pub.py
+
+
 
 
  rosrun esaki_youbot_project_gradient ybt_metrics_csv_logger.py 
