@@ -103,7 +103,7 @@ docker run --gpus all -d --name sim_dev \
   -v $XDG_RUNTIME_DIR/pulse:$XDG_RUNTIME_DIR/pulse \
   -v /mnt/wslg:/mnt/wslg \
   -v /usr/lib/wsl:/usr/lib/wsl:ro \
-  -v /mnt/c/Users/soma0/youbot_sim:/root \
+  -v /mnt/c/Users/soma0/Docker_ws/Docker_youbot_sim:/root \
   -e ROS_MASTER_URI=http://192.168.44.61:11311 \
   -e ROS_IP=$WSL_IP \
   sim_dev tail -f /dev/null

@@ -5,7 +5,7 @@
       xmlns:xacro="http://www.ros.org/wiki/xacro/#interface">
   
 <xacro:macro name="asus_xtion_camera_gazebo" params="name">
-  <gazebo reference="${name}_camera">
+  <!-- <gazebo reference="${name}_camera">
 
   <sensor type="depth" name="${name}_depth_frame_sensor">    
     <always_on>true</always_on>
@@ -87,7 +87,7 @@
     </plugin>
   </sensor>
 
-  </gazebo>
+  </gazebo> -->
 
 </xacro:macro>
 
