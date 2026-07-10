@@ -17,6 +17,14 @@ docker run -d --name irm_dev --network=host \
   -e ROS_IP=$(hostname -I | awk '{print $1}') \
   irm_dev tail -f /dev/null
 
+
+
+docker rm -f irm_dev
+docker run -d --name irm_dev --network=host \
+  -v ~/Doceker_ws/Docker_ReachabilityMap:/root \
+  irm_dev tail -f /dev/null
+
+
 docker exec -it irm_dev bash
 
 
@@ -44,6 +52,13 @@ docker run -d --name youbot_pro --network=host \
   -v /mnt/c/Users/soma0/Docker_project/youbot_pro/Docker_Youbot_project_gradient:/root \
   -e ROS_MASTER_URI=http://192.168.44.61:11311 \
   -e ROS_IP=$(hostname -I | awk '{print $1}') \
+  youbot_pro tail -f /dev/null
+
+docker exec -it youbot_pro bash
+
+
+docker run -d --name youbot_pro --network=host \
+  -v ~/Doceker_ws/Docker_Youbot_project_gradient:/root \
   youbot_pro tail -f /dev/null
 
 docker exec -it youbot_pro bash
@@ -261,7 +276,7 @@ roslaunch youbot_gazebo_robot youbot_dual_arm.launch
 # source devel/setup.bash
 
 # roslaunch youbot_gazebo_robot youbot_dual_arm.launch
-# roslaunch youbot_gazebo_robot youbot_dual_arm.launch world:=empty_world
+roslaunch youbot_gazebo_robot youbot_dual_arm.launch world:=empty_world
 # roslaunch youbot_gazebo_robot youbot_dual_arm.launch world:=tower_of_hanoi
 # roslaunch youbot_gazebo_robot youbot_dual_arm.launch world:=robocup_at_work_2012
 
@@ -309,3 +324,7 @@ rosrun esaki_youbot_project_gradient Origin_move_pub.py
  rosrun esaki_youbot_project_gradient ybt_metrics_csv_logger.py 
  
 docker cp youbot_pro:/tmp/ybt_metrics_20250828_204509.csv .
+
+
+
+find . -name "*.py" -exec chmod +x {} \;
